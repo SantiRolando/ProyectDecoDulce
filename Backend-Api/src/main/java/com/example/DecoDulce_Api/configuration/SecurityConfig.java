@@ -66,9 +66,15 @@ public AuthenticationProvider authenticationProvider(UserDetailsService customUs
                 // Acceso público
                 .requestMatchers("/api/auth/login", "/api/auth/register", "/api/cakes/getAllCakes").permitAll()
 
-                // GET propiedades
-                .requestMatchers(HttpMethod.GET, "/api/properties")
+                // GET de perfil, accesible para todos los roles
+                .requestMatchers(HttpMethod.GET, "/api/users/me")
                     .hasAnyRole("USER", "GESTOR", "ADMIN")
+
+                     
+                // GET por id, solo para gestores y admins 
+                .requestMatchers(HttpMethod.GET, "/api/users/{id}", "/api/users/GetAllUsers")
+                    .hasAnyRole("GESTOR", "ADMIN")
+
 
                 // POST crear
                 .requestMatchers(HttpMethod.POST, "/api/properties/newCake")
