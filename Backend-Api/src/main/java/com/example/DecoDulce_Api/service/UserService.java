@@ -1,5 +1,8 @@
 package com.example.DecoDulce_Api.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +29,9 @@ public class UserService {
         this.jwtUtil = jwtUtil;
     }
 
+  
+    //==================================SECTOR AUTH===========================================//
+  
     /**
      * Registra un usuario, codifica la contraseña y devuelve un token JWT.
      *
@@ -81,6 +87,105 @@ public class UserService {
                 .build();
     }
 
+    //==============================================================================================//
+
+
+    //==========================================SECTOR FIND=================================================//
+
+  public DtoUser findByUsername(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            return null;
+        }
+        DtoUser dtoUser = new DtoUser();
+        dtoUser.setId(user.getId());
+        dtoUser.setEmail(user.getEmail());
+        dtoUser.setNombre(user.getNombre());
+        dtoUser.setRol(user.getRol());
+        return dtoUser;
+    }
+
+    public DtoUser findById(Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            return null;
+        }
+        DtoUser dtoUser = new DtoUser();
+        dtoUser.setId(user.getId());
+        dtoUser.setEmail(user.getEmail());
+        dtoUser.setNombre(user.getNombre());
+        dtoUser.setRol(user.getRol());
+        return dtoUser;
+    }
+    //==============================================================================================//
+
+
+
+    //============================================SECTOR GET===============================================//
+    public DtoUser getCurrentUser(Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            return null;
+        }
+        DtoUser dtoUser = new DtoUser();
+        dtoUser.setId(user.getId());
+        dtoUser.setEmail(user.getEmail());
+        dtoUser.setNombre(user.getNombre());
+        dtoUser.setRol(user.getRol());
+        return dtoUser;
+    }
+
+    public Iterable<DtoUser> getAllUsers() {
+        Iterable<User> users = userRepository.findAll();
+        List<DtoUser> dtoUsers = new ArrayList<>();
+        for (User user : users) {
+            DtoUser dtoUser = new DtoUser();
+            dtoUser.setId(user.getId());
+            dtoUser.setEmail(user.getEmail());
+            dtoUser.setNombre(user.getNombre());
+            dtoUser.setRol(user.getRol());
+            dtoUsers.add(dtoUser);
+        }
+        return dtoUsers;
+    }
+    //==============================================================================================//
+
+
+    //============================================SECTOR UPDATE===============================================//
+    public DtoUser updateUser(Long id, DtoUser updatedUser) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            return null;
+        }
+        user.setNombre(updatedUser.getNombre());
+        user.setEmail(updatedUser.getEmail());
+        if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        }
+        if (updatedUser.getRol() != null && !updatedUser.getRol().isEmpty()) {
+            user.setRol(updatedUser.getRol());
+        }
+        userRepository.save(user);
+
+        DtoUser dtoUser = new DtoUser();
+        dtoUser.setId(user.getId());
+        dtoUser.setEmail(user.getEmail());
+        dtoUser.setNombre(user.getNombre());
+        dtoUser.setRol(user.getRol());
+        return dtoUser;
+    }
+
+    public boolean dropUser(Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            return false;
+        }
+        user.setActivo(false);
+        userRepository.save(user);
+        return true;
+    }
+
+        //==============================================================================================//
 
 
 }
