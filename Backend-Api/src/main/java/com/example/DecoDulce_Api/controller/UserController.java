@@ -3,6 +3,7 @@ package com.example.DecoDulce_Api.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,8 +32,10 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    //Esta funcion se encarga de devolver mediante el Id del usuario la informacion del mismo,
+    //Esta informacion es la que aparece en el perfil del usuario, y se puede acceder a ella mediante el endpoint /api/users/{id}
     @GetMapping("/{id}")
-    public ResponseEntity<DtoUser> GetUserById(Long id) {
+    public ResponseEntity<DtoUser> GetUserById(@PathVariable Long id) {
         DtoUser user = userService.findById(id);
         if(user == null) {
             return ResponseEntity.notFound().build();
@@ -45,7 +48,8 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-
+    //Esta funcion se encarga de actualizar la informacion del usuario, recibe un DtoUser con la nueva informacion del usuario, 
+    // y se accede a ella mediante el endpoint /api/users/updateUser
     @PutMapping("/updateUser")
     public ResponseEntity<DtoUser> UpdateUser(Authentication authentication, @RequestBody DtoUser user) {
         DtoUser currentUser = userService.findByUsername(authentication.getName());
