@@ -72,7 +72,7 @@ public AuthenticationProvider authenticationProvider(UserDetailsService customUs
 
                      
                 // GET por id, solo para gestores y admins 
-                .requestMatchers(HttpMethod.GET, "/api/users/{id}", "/api/users/GetAllUsers")
+                .requestMatchers(HttpMethod.GET, "/api/users/{id}", "/api/properties/GetAllUsers")
                     .hasAnyRole("GESTOR", "ADMIN")
 
 
