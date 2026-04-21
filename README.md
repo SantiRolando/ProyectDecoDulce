@@ -1,34 +1,43 @@
-🎂 DecoDulce - Backend API
+# 🎂 DecoDulce - Backend API
 
 API REST desarrollada para la gestión de tortas, implementando autenticación JWT y buenas prácticas de desarrollo backend con Spring Boot.
 
-🚀 Tecnologías utilizadas
-Java 17+
-Spring Boot
-Spring Security
-JWT (Json Web Token)
-Spring Data JPA
-Hibernate
-MySQL / H2 (según tu configuración)
-Maven
-📌 Funcionalidades
-🔐 Autenticación con JWT
-👤 Manejo de usuarios y roles (ADMIN / USER)
-🎂 CRUD completo de tortas
-🛡️ Protección de endpoints con Spring Security
-📦 Arquitectura en capas (Controller, Service, Repository)
-✅ Manejo de errores y códigos HTTP
-📁 Estructura del Proyecto
-src/
- ├── controller
- ├── service
- ├── repository
- ├── model
- ├── dto
- ├── configuration
- └── security
-⚙️ Cómo levantar el proyecto
-1️⃣ Clonar el repositorio
+---
+
+# 🚀 Tecnologías utilizadas
+
+- Java 17+
+- Spring Boot
+- Spring Security
+- JWT (Json Web Token)
+- Spring Data JPA
+- Hibernate
+- Maven
+- MySQL / H2 (según configuración)
+
+---
+
+# 📌 Funcionalidades
+
+- 🔐 Autenticación con JWT
+- 👤 Manejo de usuarios y roles (ADMIN / USER)
+- 🎂 CRUD completo de tortas
+- 🛡️ Protección de endpoints con Spring Security
+- 📦 Arquitectura en capas (Controller, Service, Repository)
+- ✅ Manejo de errores y códigos HTTP
+
+---
+
+# 📁 Estructura del Proyecto
+<img width="142" height="205" alt="image" src="https://github.com/user-attachments/assets/8523f50c-6062-40df-8836-84a4ac5d94d3" />
+
+---
+
+# ⚙️ Cómo levantar el proyecto
+
+## 1️⃣ Clonar el repositorio
+
+```bash
 git clone https://github.com/TU-USUARIO/TU-REPOSITORIO.git
 2️⃣ Entrar al proyecto
 cd nombre-del-proyecto
@@ -38,7 +47,7 @@ Editar el archivo:
 
 src/main/resources/application.properties
 
-Ejemplo:
+Ejemplo de configuración:
 
 spring.datasource.url=jdbc:mysql://localhost:3306/decodulce
 spring.datasource.username=root
@@ -52,9 +61,7 @@ Desde terminal:
 
 mvn spring-boot:run
 
-O desde tu IDE (IntelliJ / Eclipse / VS Code):
-
-Ejecutar la clase:
+O desde tu IDE ejecutar la clase principal:
 
 DecoDulceApiApplication.java
 🔐 Autenticación
