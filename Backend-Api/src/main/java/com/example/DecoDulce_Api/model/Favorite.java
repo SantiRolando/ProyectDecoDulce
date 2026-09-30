@@ -20,7 +20,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "favoritos", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"usuario_id", "propiedad_id"})
+    @UniqueConstraint(columnNames = {"usuario_id", "cake_id"})
 })
 @Getter
 @Setter

@@ -11,11 +11,25 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DtoUser {
 
-    public Long Id;
-    public String Nombre;
-    public String Email;
-    public String Password;
-    public String Rol;
+    private Long id;
+    private String nombre;
+    private String email;
+    private String password;
+    private String rol;
 
-    
+
+    //Constructor para login (solo email y password)
+    public DtoUser(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    //Constructor para registro (nombre, email, password)
+    public DtoUser(String nombre, String email, String password) {
+        this.nombre = nombre;
+        this.email = email;
+        this.password = password;
+    }
+
 }
+

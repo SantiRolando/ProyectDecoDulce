@@ -35,6 +35,9 @@ public class Cake {
     @Column(name = "categoria", nullable = false)
     private String categoria;
 
+    @Column(name = "porciones")
+    private String porciones;
+
     @Column(name = "activo", nullable = false)
     private Boolean activo;
 

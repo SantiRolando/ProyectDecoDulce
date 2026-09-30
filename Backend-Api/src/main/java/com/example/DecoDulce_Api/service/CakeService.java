@@ -1,7 +1,10 @@
 package com.example.DecoDulce_Api.service;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.DecoDulce_Api.dtos.DtoCake;
@@ -32,6 +35,7 @@ public class CakeService {
     newCake.setPrecioBase(cake.getPrecioBase());
     newCake.setImagen(cake.getImagen());
     newCake.setCategoria(cake.getCategoria());
+    newCake.setPorciones(cake.getPorciones());
     newCake.setActivo(true);
 
     Cake saved = cakeRepository.save(newCake);
@@ -52,7 +56,7 @@ public class CakeService {
     /*Funcion que devuelve todas las tortas */
     public List<DtoCake> getAllCakes() throws NoCakesException {
 
-        List<DtoCake> cakes = null;
+        List<DtoCake> cakes = new java.util.ArrayList<>();
 
         List<Cake> cakeList = cakeRepository.findAll();
 
@@ -73,6 +77,7 @@ public class CakeService {
             dtoCake.setPrecioBase(cake.getPrecioBase());
             dtoCake.setImagen(cake.getImagen());
             dtoCake.setCategoria(cake.getCategoria());
+            dtoCake.setPorciones(cake.getPorciones());
             dtoCake.setActivo(cake.getActivo());
             cakes.add(dtoCake);
         }
@@ -106,6 +111,9 @@ public class CakeService {
         if (cake.getCategoria() != null) {
             existingCake.setCategoria(cake.getCategoria());
         }
+        if (cake.getPorciones() != null) {
+            existingCake.setPorciones(cake.getPorciones());
+        }
         if (cake.getActivo() != null) {
             existingCake.setActivo(cake.getActivo());
         }
@@ -122,6 +130,7 @@ public class CakeService {
         updatedDto.setPrecioBase(updatedCake.getPrecioBase());
         updatedDto.setImagen(updatedCake.getImagen());
         updatedDto.setCategoria(updatedCake.getCategoria());
+        updatedDto.setPorciones(updatedCake.getPorciones());
         updatedDto.setActivo(updatedCake.getActivo());
 
         return updatedDto;
@@ -138,6 +147,27 @@ public class CakeService {
         // Eliminar la torta por ID
         cakeRepository.deleteById(id);
         return true;
+    }
+
+    public Optional<DtoCake> findById(Long id) {
+        return cakeRepository.findById(id).map(this::toDto);
+    }
+
+    public Page<DtoCake> getActiveCakes(Pageable pageable) {
+        return cakeRepository.findAll(pageable).map(this::toDto);
+    }
+
+    private DtoCake toDto(Cake cake) {
+        DtoCake dto = new DtoCake();
+        dto.setId(cake.getId());
+        dto.setNombre(cake.getNombre());
+        dto.setDescripcion(cake.getDescripcion());
+        dto.setPrecioBase(cake.getPrecioBase());
+        dto.setImagen(cake.getImagen());
+        dto.setCategoria(cake.getCategoria());
+        dto.setPorciones(cake.getPorciones());
+        dto.setActivo(cake.getActivo());
+        return dto;
     }
 
 

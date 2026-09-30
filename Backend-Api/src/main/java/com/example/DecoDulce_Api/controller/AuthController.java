@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.DecoDulce_Api.dtos.DtoUser;
+import com.example.DecoDulce_Api.exception.EmailAlreadyExistsException;
 import com.example.DecoDulce_Api.service.UserService;
 
 @RestController
@@ -27,6 +28,9 @@ public class AuthController {
      */
     @PostMapping("/register")
     public String register(@RequestBody DtoUser user) {
+        if (userService.existsByEmail(user.getEmail())) {
+            throw new EmailAlreadyExistsException("El email ya está en uso");
+        }
         return userService.registerUser(user);
     }
 

@@ -46,11 +46,7 @@ public class UserService {
         User user1 = new User();
         user1.setEmail(user.getEmail());
         user1.setNombre(user.getNombre());
-        if(user.getRol() == null || user.getRol().isEmpty()) {
-            user1.setRol("ROLE_USER"); // rol por defecto
-        } else {
-            user1.setRol(user.getRol());
-        }
+        user1.setRol("ROLE_USER");
         
 
         // encriptar la contraseña antes de guardar
@@ -60,7 +56,7 @@ public class UserService {
         userRepository.save(user1);
 
         // generar token manualmente porque Spring no lo hace por nosotros
-        return jwtUtil.generateToken(user.getEmail(), user.getRol());
+        return "TOKEN: " + jwtUtil.generateToken(user.getEmail(), user1.getRol());
     }
 
     /**
@@ -71,7 +67,7 @@ public class UserService {
         if (u == null) {
             throw new IllegalArgumentException("Usuario no encontrado");
         }
-        return jwtUtil.generateToken(u.getEmail(), u.getRol());
+        return "TOKEN: " + jwtUtil.generateToken(u.getEmail(), u.getRol());
     }
 
 
@@ -116,6 +112,10 @@ public class UserService {
         dtoUser.setNombre(user.getNombre());
         dtoUser.setRol(user.getRol());
         return dtoUser;
+    }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.findByEmail(email) != null;
     }
     //==============================================================================================//
 

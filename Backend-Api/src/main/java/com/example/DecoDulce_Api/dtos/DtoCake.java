@@ -16,6 +16,7 @@ public class DtoCake {
     private Double precioBase;
     private String imagen;
     private String categoria;
+    private String porciones;
     private Boolean activo;
 }
 

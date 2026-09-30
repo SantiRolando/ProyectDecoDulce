@@ -1,6 +1,9 @@
 package com.example.DecoDulce_Api.configuration;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -8,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,13 +19,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.example.DecoDulce_Api.service.CustomUserDetailsService;
 import com.example.DecoDulce_Api.util.JwTFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
+
+    @Value("${app.cors.allowed-origins}")
+    private String allowedOrigins;
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
@@ -61,10 +72,25 @@ public AuthenticationProvider authenticationProvider(UserDetailsService customUs
     {
         http
             .csrf(csrf -> csrf.disable())
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests((requests) -> requests
 
                 // Acceso público
-                .requestMatchers("/api/auth/login", "/api/auth/register", "/api/cakes/getAllCakes").permitAll()
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/health").permitAll()
+                .requestMatchers("/uploads/cakes/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/orders/with-proof").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/cakes/admin/**")
+                    .hasAnyRole("GESTOR", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/orders")
+                    .hasAnyRole("GESTOR", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/orders/*/transfer-proof")
+                    .hasAnyRole("GESTOR", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/orders/{id}").permitAll()
+                .requestMatchers(HttpMethod.PATCH, "/api/orders/**")
+                    .hasAnyRole("GESTOR", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/cakes", "/api/cakes/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/orders", "/api/contact", "/api/custom-cakes").permitAll()
 
                 // GET de perfil, accesible para todos los roles
                 .requestMatchers(HttpMethod.GET, "/api/users/me")
@@ -77,15 +103,15 @@ public AuthenticationProvider authenticationProvider(UserDetailsService customUs
 
 
                 // POST crear
-                .requestMatchers(HttpMethod.POST, "/api/properties/newCake")
+                .requestMatchers(HttpMethod.POST, "/api/cakes/**")
                     .hasAnyRole("GESTOR", "ADMIN")
 
                 // PUT editar
-                .requestMatchers(HttpMethod.PUT, "/api/properties/newCake", "/api/properties/updateCake/**")
+                .requestMatchers(HttpMethod.PUT, "/api/cakes/**")
                     .hasAnyRole("GESTOR", "ADMIN")
 
                 // DELETE eliminar
-                .requestMatchers(HttpMethod.DELETE, "/api/properties/deleteCake/**")
+                .requestMatchers(HttpMethod.DELETE, "/api/cakes/**")
                     .hasRole("ADMIN")
 
                 .anyRequest().authenticated()
@@ -94,5 +120,16 @@ public AuthenticationProvider authenticationProvider(UserDetailsService customUs
              .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
