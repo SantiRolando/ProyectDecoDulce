@@ -6,7 +6,7 @@ services:
     environment:
       MYSQL_DATABASE: decodulce
       MYSQL_USER: decodulce
-      MYSQL_PASSWORD: decodulce
+      MYSQL_PASSWORD: De#c@Du.lce
       MYSQL_ROOT_PASSWORD: root
     ports:
       - "3306:3306"
