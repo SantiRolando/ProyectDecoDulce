@@ -11,6 +11,28 @@ import { Legal } from './pages/Legal';
 import { SiteFooter } from './components/SiteFooter';
 
 export function App() {
+  
+  // Si la variable está activa, muestra la pantalla de sitio en construcción
+  if (import.meta.env.VITE_MAINTENANCE_MODE === 'true') {
+    return (
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        fontFamily: 'sans-serif',
+        backgroundColor: '#fff5f7',
+        color: '#d63384',
+        textAlign: 'center',
+        padding: '20px'
+      }}>
+        <h1>🍰 Deco Dulce</h1>
+        <h2>Estamos preparando algo delicioso...</h2>
+        <p>Nuestro sitio web estará disponible muy pronto.</p>
+      </div>
+    );
+  }
   return (
     <CartProvider>
     <BrowserRouter>
