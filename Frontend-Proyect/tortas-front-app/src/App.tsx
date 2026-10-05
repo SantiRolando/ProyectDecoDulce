@@ -9,11 +9,34 @@ import { Checkout } from './pages/Checkout';
 import { Admin } from './pages/Admin';
 import { Legal } from './pages/Legal';
 import { SiteFooter } from './components/SiteFooter';
+import { useEffect, useState } from 'react';
 
 export function App() {
   
-  // Si la variable está activa, muestra la pantalla de sitio en construcción
-  if (import.meta.env.VITE_MAINTENANCE_MODE === 'true') {
+  const [bypass, setBypass] = useState(false);
+
+  useEffect(() => {
+    // Lee el token secreto configurado en las variables de entorno
+    const secretToken = import.meta.env.VITE_ADMIN_BYPASS_TOKEN;
+    const params = new URLSearchParams(window.location.search);
+    const urlAccessKey = params.get('admin_access');
+
+    // 1. Si la clave pasada por la URL coincide con el token de entorno
+    if (secretToken && urlAccessKey === secretToken) {
+      localStorage.setItem('dev_bypass_token', secretToken);
+      setBypass(true);
+      // Limpia la URL para no dejar la clave expuesta en la barra de direcciones del navegador
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } 
+    // 2. Si ya existía un token guardado previamente en este navegador
+    else if (secretToken && localStorage.getItem('dev_bypass_token') === secretToken) {
+      setBypass(true);
+    }
+  }, []);
+
+
+  // Si el modo mantenimiento está activo Y el cliente no tiene el bypass validado
+  if (import.meta.env.VITE_MAINTENANCE_MODE === 'true' && !bypass) {
     return (
       <div style={{
         display: 'flex',
@@ -33,6 +56,8 @@ export function App() {
       </div>
     );
   }
+
+
   return (
     <CartProvider>
     <BrowserRouter>
