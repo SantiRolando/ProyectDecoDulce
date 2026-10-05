@@ -11,6 +11,9 @@ import { Legal } from './pages/Legal';
 import { SiteFooter } from './components/SiteFooter';
 import { useEffect, useState } from 'react';
 
+// Importación del logo desde la carpeta assets
+import decoLogo from './assets/DecoLogo.jpeg';
+
 export function App() {
   
   const [bypass, setBypass] = useState(false);
@@ -50,7 +53,17 @@ export function App() {
         textAlign: 'center',
         padding: '20px'
       }}>
-        <h1>🍰 Deco Dulce</h1>
+        {/* Logo de DecoDulce */}
+        <img 
+          src={decoLogo} 
+          alt="Deco Dulce Logo" 
+          style={{ 
+            width: '200px', 
+            height: 'auto', 
+            marginBottom: '1.5rem',
+            borderRadius: '12px' 
+          }} 
+        />
         <h2>Estamos preparando algo delicioso...</h2>
         <p>Nuestro sitio web estará disponible muy pronto.</p>
       </div>
@@ -60,23 +73,23 @@ export function App() {
 
   return (
     <CartProvider>
-    <BrowserRouter>
-      <Routes>
-        {/* Página de Inicio */}
-        <Route path="/" element={<Catalog />} />
-        
-        {/* Página del Catálogo Completo y Detallado */}
-        <Route path="/catalog" element={<FullCatalog />} />
-        <Route path="/customcake" element={<CustomCake/>}/>
-        <Route path='/about' element={<About/>}/>
-        <Route path='/contact' element={<Contact/>}/>
-        <Route path='checkout' element={<Checkout/>}/>
-        <Route path='/admin' element={<Admin/>}/>
-        <Route path='/legal/terminos' element={<Legal/>}/>
-        <Route path='/legal/privacidad' element={<Legal/>}/>
-      </Routes>
-      <SiteFooter />
-    </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          {/* Página de Inicio */}
+          <Route path="/" element={<Catalog />} />
+          
+          {/* Página del Catálogo Completo y Detallado */}
+          <Route path="/catalog" element={<FullCatalog />} />
+          <Route path="/customcake" element={<CustomCake />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/legal/terminos" element={<Legal />} />
+          <Route path="/legal/privacidad" element={<Legal />} />
+        </Routes>
+        <SiteFooter />
+      </BrowserRouter>
     </CartProvider>
   );
 }

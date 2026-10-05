@@ -12,6 +12,24 @@ export const Contact: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // 1. Número de WhatsApp de destino (Uruguay +598)
+    const phoneNumber = '59892860627';
+
+    // 2. Construcción del mensaje formateado
+    const whatsappMessage = `Hola Deco Dulce! 🍰\n\n` +
+      `Tengo una consulta desde la web:\n` +
+      `*Nombre:* ${formData.name}\n` +
+      `*Email:* ${formData.email}\n` +
+      `*Teléfono:* ${formData.phone || 'No especificado'}\n\n` +
+      `*Mensaje:*\n${formData.message}`;
+
+    // 3. Generación de la URL encodeada
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+
+    // 4. Abrir WhatsApp en una nueva pestaña
+    window.open(whatsappUrl, '_blank');
+
     setSubmitted(true);
   };
 
@@ -45,7 +63,6 @@ export const Contact: React.FC = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
           <Search size={20} style={{ cursor: 'pointer', color: '#4A3525' }} />
           
-          {/* ICONO DEL CARRITO CON CONTADOR Y APERTURA DE DRAWER */}
           <div style={{ position: 'relative', cursor: 'pointer' }} onClick={() => setIsCartOpen(true)}>
             <ShoppingCart size={20} style={{ color: '#4A3525' }} />
             {totalItems > 0 && (
@@ -60,7 +77,6 @@ export const Contact: React.FC = () => {
       {/* CONTENIDO PRINCIPAL */}
       <main style={{ padding: '40px', maxWidth: '1000px', margin: '0 auto' }}>
         
-        {/* TÍTULO SECCIÓN */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#F5ECE3', padding: '6px 16px', borderRadius: '20px', color: '#8C6D53', fontSize: '12px', fontWeight: 'bold', marginBottom: '10px' }}>
             <Mail size={14} /> ESTAMOS EN CONTACTO
@@ -71,7 +87,6 @@ export const Contact: React.FC = () => {
           </p>
         </div>
 
-        {/* GRILLA DE INFORMACIÓN Y FORMULARIO */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '40px', alignItems: 'start' }}>
           
           {/* INFORMACIÓN DE CONTACTO */}
@@ -94,7 +109,7 @@ export const Contact: React.FC = () => {
               </div>
               <div>
                 <h4 style={{ margin: '0 0 3px 0', fontSize: '14px', fontWeight: 'bold', color: '#332211' }}>WhatsApp / Teléfono</h4>
-                <p style={{ margin: 0, fontSize: '13px', color: '#7D6552' }}>+598 99 000 000</p>
+                <p style={{ margin: 0, fontSize: '13px', color: '#7D6552' }}>+598 92 860 627</p>
               </div>
             </div>
 
@@ -104,7 +119,7 @@ export const Contact: React.FC = () => {
               </div>
               <div>
                 <h4 style={{ margin: '0 0 3px 0', fontSize: '14px', fontWeight: 'bold', color: '#332211' }}>Correo electrónico</h4>
-                <p style={{ margin: 0, fontSize: '13px', color: '#7D6552' }}>contacto@dulcemomento.uy</p>
+                <p style={{ margin: 0, fontSize: '13px', color: '#7D6552' }}>postres@decodulce.org</p>
               </div>
             </div>
 
@@ -126,9 +141,9 @@ export const Contact: React.FC = () => {
                 <div style={{ width: '55px', height: '55px', background: '#E5F4ED', color: '#2E7D32', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 15px auto' }}>
                   <Check size={28} />
                 </div>
-                <h3 style={{ fontSize: '22px', fontWeight: 'bold', color: '#332211', marginBottom: '10px' }}>¡Mensaje enviado!</h3>
+                <h3 style={{ fontSize: '22px', fontWeight: 'bold', color: '#332211', marginBottom: '10px' }}>¡Redirigiendo a WhatsApp!</h3>
                 <p style={{ color: '#7D6552', fontSize: '14px', marginBottom: '20px' }}>
-                  Gracias por comunicarte. Te responderemos a la brevedad.
+                  Se ha abierto una nueva ventana para enviar tu mensaje por WhatsApp.
                 </p>
                 <button 
                   onClick={() => { setSubmitted(false); setFormData({ name: '', email: '', phone: '', message: '' }); }}
@@ -139,7 +154,7 @@ export const Contact: React.FC = () => {
               </div>
             ) : (
               <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '20px' }}>
-                <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#332211', margin: '0 0 5px 0' }}>Envianos un mensaje</h3>
+                <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#332211', margin: '0 0 5px 0' }}>Envianos un mensaje por WhatsApp</h3>
                 
                 <div>
                   <label style={{ display: 'block', fontSize: '13px', fontWeight: 'bold', color: '#332211', marginBottom: '6px' }}>Nombre y Apellido</label>
@@ -195,9 +210,9 @@ export const Contact: React.FC = () => {
 
                 <button 
                   type="submit"
-                  style={{ background: '#4A3525', color: 'white', border: 'none', padding: '12px 24px', borderRadius: '30px', fontSize: '14px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', marginTop: '5px' }}
+                  style={{ background: '#25D366', color: 'white', border: 'none', padding: '12px 24px', borderRadius: '30px', fontSize: '14px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', marginTop: '5px' }}
                 >
-                  Enviar mensaje <Send size={15} />
+                  Enviar por WhatsApp <Send size={15} />
                 </button>
               </form>
             )}
@@ -207,7 +222,6 @@ export const Contact: React.FC = () => {
 
       </main>
 
-      {/* COMPONENTE DE LA BARRA LATERAL DEL CARRITO */}
       <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
 
     </div>
